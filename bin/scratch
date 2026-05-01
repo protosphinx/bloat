@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# scratch - open a fresh dated markdown file in $EDITOR.
+#
+# Defaults to $TMPDIR; override via $SCRATCH_DIR.
+set -euo pipefail
+dir="${SCRATCH_DIR:-${TMPDIR:-/tmp}}"
+mkdir -p "$dir"
+file="$dir/scratch-$(date +%Y%m%d-%H%M%S).md"
+exec "${EDITOR:-vim}" "$file"

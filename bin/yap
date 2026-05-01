@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# yap - append a timestamped line to ~/.yap, the most lo-fi journal.
+#
+# Usage:
+#     yap                # open the file in $EDITOR
+#     yap "thought"      # append "[ts] thought" and exit
+#     yap --tail         # print the last 20 entries
+set -euo pipefail
+
+file="${YAP_FILE:-$HOME/.yap}"
+touch "$file"
+
+if [[ $# -eq 0 ]]; then
+    exec "${EDITOR:-vim}" "$file"
+fi
+
+if [[ "${1:-}" == "--tail" ]]; then
+    tail -n 20 "$file"
+    exit 0
+fi
+
+ts="$(date '+%Y-%m-%d %H:%M')"
+echo "[$ts] $*" >> "$file"

@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# wd - "what dir": print a one-line summary of the current directory.
+#
+# Useful when you cd into something and forget what's there.
+set -euo pipefail
+
+cwd="$(pwd)"
+echo "$cwd"
+
+# git status one-liner.
+if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    branch="$(git branch --show-current 2>/dev/null || echo 'detached')"
+    ahead_behind=""
+    if upstream="$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null)"; then
+        counts="$(git rev-list --left-right --count "$upstream...HEAD" 2>/dev/null || true)"
+        if [[ -n "$counts" ]]; then
+            behind="$(echo "$counts" | awk '{print $1}')"
+            ahead="$(echo "$counts" | awk '{print $2}')"
+            [[ "$ahead" -gt 0 ]] && ahead_behind+=" +$ahead"
+            [[ "$behind" -gt 0 ]] && ahead_behind+=" -$behind"
+        fi
+    fi
+    dirty=""
+    if ! git diff --quiet 2>/dev/null || ! git diff --cached --quiet 2>/dev/null; then
+        dirty=" *"
+    fi
+    echo "git: $branch$ahead_behind$dirty"
+fi
+
+# If a Cargo.toml / package.json / pyproject.toml is in the dir, mention it.
+for marker in Cargo.toml package.json pyproject.toml go.mod CLAUDE.md README.md; do
+    [[ -f "$cwd/$marker" ]] && echo "found: $marker"
+done
+
+# Count of files (top-level only, ignoring dotfiles).
+n="$(ls -1 "$cwd" | grep -v '^\.' | wc -l | tr -d ' ')"
+echo "files: $n"

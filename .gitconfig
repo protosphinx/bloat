@@ -1,0 +1,73 @@
+# bloat/.gitconfig - opinionated defaults.
+#
+# Sensitive overrides (signing keys, work email) belong in ~/.gitconfig.local
+# which is sourced via [include] at the bottom.
+
+[user]
+    name = protosphinx
+    email = 133899485+protosphinx@users.noreply.github.com
+
+[init]
+    defaultBranch = main
+
+[core]
+    editor = vim
+    autocrlf = input
+    excludesfile = ~/.gitignore_global
+    pager = less -FRX
+
+[color]
+    ui = auto
+
+[push]
+    default = current
+    autoSetupRemote = true
+    followTags = true
+
+[pull]
+    rebase = true
+
+[fetch]
+    prune = true
+
+[merge]
+    conflictstyle = zdiff3
+    ff = only
+
+[rebase]
+    autostash = true
+    autosquash = true
+
+[diff]
+    algorithm = histogram
+    colorMoved = default
+
+[log]
+    date = iso
+
+[rerere]
+    enabled = true
+
+[help]
+    autocorrect = prompt
+
+[advice]
+    detachedHead = false
+
+[alias]
+    s = status
+    co = checkout
+    cb = checkout -b
+    ci = commit
+    cm = commit -m
+    ca = commit --amend --no-edit
+    last = log -1 HEAD --stat
+    unstage = reset HEAD --
+    undo = reset --soft HEAD~1
+    lg = log --oneline --decorate --graph -20
+    lga = log --oneline --decorate --graph --all -40
+    aliases = !git config -l | grep alias | cut -c 7-
+    root = rev-parse --show-toplevel
+
+[include]
+    path = ~/.gitconfig.local

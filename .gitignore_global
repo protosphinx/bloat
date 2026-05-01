@@ -1,0 +1,37 @@
+# bloat/.gitignore_global - things you never want in any repo.
+#
+# Symlinked to ~/.gitignore_global by install.sh and referenced from
+# .gitconfig core.excludesfile.
+
+# OS detritus.
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor / IDE.
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Local-only bloat.
+.envrc.local
+.zshrc.local
+.gitconfig.local
+
+# Logs.
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Common build artifacts (override per-repo if you actually want these).
+target/
+node_modules/
+dist/
+build/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.venv/
